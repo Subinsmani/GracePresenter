@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GracePresenter</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="../icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../icons/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../icons/apple-touch-icon.png">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="../icons/logo.png" alt="GracePresenter Logo" class="header-logo">
+            <h1>GracePresenter</h1>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Songs</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </header>
+    <main>
+        <div class="container">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="category">Select Category:</label>
+                    <select id="category">
+                        <option value="">--Select Category--</option>
+                        <option value="Malayalam">Malayalam</option>
+                        <option value="Hindi">Hindi</option>
+                        <option value="English">English</option>
+                    </select>
+                </div>
+                <div class="form-group" id="song-group" style="display: none;">
+                    <label for="song">Select Song:</label>
+                    <select id="song">
+                        <option value="">--Select Song--</option>
+                    </select>
+                </div>
+                <div class="form-group" id="search-group">
+                    <label for="search">Search Song:</label>
+                    <input type="text" id="search" placeholder="Enter song name or number">
+                    <ul id="search-results" class="search-results" style="display: none;"></ul>
+                </div>
+            </div>
+            <div id="zoom-slider" class="zoom-slider">
+                <label for="zoom">Zoom:</label>
+                <input type="range" id="zoom" min="100" max="300" value="100">
+            </div>
+            <div id="song-number-container" style="display: none;">
+                <p id="song-number-text"></p>
+            </div>
+            <div class="song-not-available" id="song-not-available" style="display: none;">
+                <p>Song not available</p>
+            </div>
+            <div class="error-message" id="error-message" style="display: none;">
+                <p id="error-text"></p>
+            </div>
+            <div id="translation-buttons" class="translation-buttons">
+                <button id="primary-btn" class="active">Primary</button>
+                <button id="translate-btn">Translate</button>
+            </div>
+            <div class="lyrics-container">
+                <div class="primary-lyrics" id="primary-lyrics">
+                    <h2 id="lyrics1-title"></h2>
+                    <p id="lyrics1"></p>
+                </div>
+                <div class="translate-lyrics" id="translate-lyrics">
+                    <h2 id="lyrics2-title"></h2>
+                    <p id="lyrics2"></p>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
