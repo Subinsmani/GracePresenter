@@ -51,7 +51,9 @@
                                 <input type="text" id="lyrics1-title" name="lyrics1-title" required>
                                 <label>Original Lyrics:</label>
                                 <div class="lyrics1-container">
-                                    <textarea rows="4" class="lyrics1" name="lyrics1" style="min-height: 100px;"></textarea>
+                                    <div class="lyrics-box">
+                                        <textarea rows="4" class="lyrics1" name="lyrics1" style="min-height: 100px;"></textarea>
+                                    </div>
                                 </div>
                                 <button type="button" class="add-lyrics">+</button>
                             </div>
@@ -62,13 +64,26 @@
                                 <input type="text" id="lyrics2-title" name="lyrics2-title">
                                 <label>Translated Lyrics:</label>
                                 <div class="lyrics2-container">
-                                    <textarea rows="4" class="lyrics2" name="lyrics2" style="min-height: 100px;"></textarea>
+                                    <div class="lyrics-box">
+                                        <textarea rows="4" class="lyrics2" name="lyrics2" style="min-height: 100px;"></textarea>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <button type="submit" id="submit-song">Add Song</button>
+                    <button type="submit" id="submit-song" style="display: none;">Add Song</button>
                 </form>
+            </div>
+            <!-- Form content for managing songs -->
+            <div id="manage-song-form-container" style="display: none;">
+                <h2>Manage Songs</h2>
+                <div class="form-group">
+                    <label for="manage-category">Category:</label>
+                    <select id="manage-category" name="category">
+                        <option value="" disabled selected>Loading categories...</option>
+                    </select>
+                    <button id="sync-songs-button">Sync Songs</button>
+                </div>
             </div>
         </div>
     </div>
@@ -112,8 +127,10 @@
             document.getElementById('import-button').style.display = 'inline-block';
         });
     </script>
+
     <script src="/manage/script.js"></script>
     <script src="/manage/import.js"></script>
-    <script src="/manage/addsongs.js"></script> <!-- Importing the new JS file for adding songs -->
+    <script src="/manage/addsongs.js"></script>
+    <script src="/manage/managesong.js"></script> <!-- Importing the new JS file for managing songs -->
 </body>
 </html>

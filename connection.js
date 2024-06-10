@@ -11,11 +11,11 @@ const db = new sqlite3.Database(path.resolve(__dirname, 'database/songs.db'), (e
 });
 
 // Function to add a new song
-function addSong(songName, lyrics1Title, lyrics2Title, category, lyrics1, lyrics2, callback) {
+function addSong(id, songName, lyrics1Title, lyrics2Title, category, lyrics1, lyrics2, callback) {
     const timestamp = new Date().toISOString();
-    const sql = `INSERT INTO song_details (name, name1, name2, language, timestamp, lyrics1, lyrics2) 
-                 VALUES (?, ?, ?, ?, ?, ?, ?)`;
-    db.run(sql, [songName, lyrics1Title, lyrics2Title, category, timestamp, lyrics1, lyrics2], function(err) {
+    const sql = `INSERT INTO song_details (id, name, name1, name2, language, timestamp, lyrics1, lyrics2) 
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+    db.run(sql, [id, songName, lyrics1Title, lyrics2Title, category, timestamp, lyrics1, lyrics2], function(err) {
         if (err) {
             return callback(err);
         }

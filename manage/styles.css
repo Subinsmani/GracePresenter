@@ -356,3 +356,51 @@ button#submit-song {
 button#submit-song:hover {
     background-color: #155ab6;
 }
+
+/* New styles for manage songs container */
+#manage-song-form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#sync-songs-button {
+    background-color: #1a73e8;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 0.7em;
+    margin-left: 1em;
+}
+
+#sync-songs-button:hover {
+    background-color: #155ab6;
+}
+
+.lyrics-box {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.lyrics-box textarea {
+    flex: 1;
+}
+
+.lyrics-box .remove-lyrics {
+    margin-left: 1em;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 0.5em 1em;
+    cursor: pointer;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.lyrics-box .remove-lyrics:hover {
+    background-color: darkred;
+}

@@ -80,13 +80,27 @@ app.get('/manage/get-categories', (req, res) => {
     res.json(categories);
 });
 
-app.post('/manage/add-song', (req, res) => {
-    const { songName, lyrics1Title, lyrics2Title, category, lyrics1, lyrics2 } = req.body;
-    db.addSong(songName, lyrics1Title, lyrics2Title, category, lyrics1, lyrics2, (err, result) => {
+app.get('/manage/get-max-id', (req, res) => {
+    const category = req.query.category;
+    const sqlMaxId = `SELECT MAX(id) as maxId FROM song_details WHERE language = ?`;
+    db.db.get(sqlMaxId, [category], (err, row) => {
         if (err) {
             return res.status(500).json({ success: false, message: err.message });
         }
-        res.json({ success: true, message: 'Song added successfully', result });
+        res.json({ success: true, maxId: row.maxId });
+    });
+});
+
+app.post('/manage/add-song', (req, res) => {
+    const { id, songName, lyrics1Title, lyrics2Title, category, lyrics1, lyrics2 } = req.body;
+    const timestamp = new Date().toISOString();
+    const sql = `INSERT INTO song_details (id, name, name1, name2, language, timestamp, lyrics1, lyrics2) 
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+    db.db.run(sql, [id, songName, lyrics1Title, lyrics2Title, category, timestamp, lyrics1, lyrics2], function (err) {
+        if (err) {
+            return res.status(500).json({ success: false, message: err.message });
+        }
+        res.json({ success: true, message: 'Song added successfully', id });
     });
 });
 
@@ -116,6 +130,66 @@ app.post('/manage/delete-song', (req, res) => {
             return res.status(500).json({ error: err.message });
         }
         res.json(result);
+    });
+});
+
+app.post('/manage/sort-songs', (req, res) => {
+    const { category } = req.body;
+
+    let sql;
+    if (category) {
+        sql = `SELECT * FROM song_details WHERE language = ? ORDER BY name COLLATE NOCASE`;
+    } else {
+        sql = `SELECT * FROM song_details ORDER BY 
+            CASE 
+                WHEN language = 'English' THEN 1 
+                WHEN language = 'Hindi' THEN 2 
+                WHEN language = 'Malayalam' THEN 3 
+            END,
+            name COLLATE NOCASE`;
+    }
+
+    const params = category ? [category] : [];
+
+    db.db.all(sql, params, (err, rows) => {
+        if (err) {
+            return res.status(500).json({ success: false, message: err.message });
+        }
+
+        // Reassign sorted IDs based on the language and order
+        const updatedRows = rows.map((row, index) => {
+            let prefix;
+            switch (row.language.toLowerCase()) {
+                case 'english':
+                    prefix = '10';
+                    break;
+                case 'hindi':
+                    prefix = '20';
+                    break;
+                case 'malayalam':
+                    prefix = '30';
+                    break;
+            }
+            const newId = `${prefix}${String(index + 1).padStart(4, '0')}`;
+            return { ...row, id: newId };
+        });
+
+        // Update the database with new IDs
+        const updatePromises = updatedRows.map(row => {
+            return new Promise((resolve, reject) => {
+                const updateSql = `UPDATE song_details SET id = ? WHERE name = ? AND language = ?`;
+                db.db.run(updateSql, [row.id, row.name, row.language], function (err) {
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve();
+                });
+            });
+        });
+
+        Promise.all(updatePromises)
+            .then(() => res.json({ success: true, message: 'Songs sorted and IDs updated successfully.' }))
+            .catch(error => res.status(500).json({ success: false, message: error.message }));
     });
 });
 

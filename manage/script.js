@@ -14,13 +14,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     addNewSongsLink.addEventListener('click', function (event) {
         event.preventDefault();
-        addSongFormContainer.style.display = 'block';
+        showAddSongFormContainer();
     });
 
     manageSongsLink.addEventListener('click', function (event) {
         event.preventDefault();
-        contentDiv.innerHTML = '<h2>Manage Songs</h2>';
-        // Add manage songs functionality here
+        showManageSongsContainer();
     });
 
     deleteSongsLink.addEventListener('click', function (event) {
@@ -30,109 +29,123 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     logoutButton.addEventListener('click', function () {
-        logout();
+        fetch('/manage/logout')
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = '/manage/login.html';
+                } else {
+                    console.error('Logout failed');
+                }
+            })
+            .catch(error => {
+                console.error('Error during logout:', error);
+            });
     });
 
-    function setupCategoryListener() {
-        const categorySelect = document.getElementById('category');
-        const hasTranslationGroup = document.getElementById('has-translation-group');
-        const songNameContainer = document.querySelector('.song-name-container');
-        const lyricsContainer1 = document.querySelector('.lyrics-container1');
-        const lyricsContainer2 = document.querySelector('.lyrics-container2');
-        const submitButton = document.getElementById('submit-song');
-        const hasTranslationSelect = document.getElementById('has-translation');
+    function showAddSongFormContainer() {
+        contentDiv.innerHTML = ''; // Clear previous content
+        contentDiv.appendChild(addSongFormContainer);
+        addSongFormContainer.style.display = 'block';
+    }
 
-        categorySelect.addEventListener('change', function () {
-            if (categorySelect.value) {
-                hasTranslationGroup.style.display = 'block';
-                songNameContainer.style.display = 'flex';
-                lyricsContainer1.style.display = 'block';
-                submitButton.style.display = 'block';
-            } else {
-                hasTranslationGroup.style.display = 'none';
-                songNameContainer.style.display = 'none';
-                lyricsContainer1.style.display = 'none';
-                lyricsContainer2.style.display = 'none';
-                submitButton.style.display = 'none';
-            }
+    function showManageSongsContainer() {
+        contentDiv.innerHTML = `
+            <h2>Manage Songs</h2>
+            <div class="form-group">
+                <label for="category">Category:</label>
+                <select id="manage-category" name="category" required>
+                    <option value="" disabled selected>Loading categories...</option>
+                </select>
+                <button id="sync-songs-button">Sync Songs</button>
+            </div>
+        `;
+        fetchCategories();
+
+        document.getElementById('sync-songs-button').addEventListener('mouseover', function () {
+            this.title = 'Sync the selected category in alphabetical order';
         });
 
-        hasTranslationSelect.addEventListener('change', function () {
-            if (hasTranslationSelect.value === 'yes') {
-                lyricsContainer2.style.display = 'block';
+        document.getElementById('sync-songs-button').addEventListener('click', function () {
+            const selectedCategory = document.getElementById('manage-category').value;
+            if (selectedCategory) {
+                syncSongs(selectedCategory);
             } else {
-                lyricsContainer2.style.display = 'none';
+                showDialog('Please select a category to sync songs.', 'OK', 'red');
             }
         });
     }
 
-    function addLyricsInputHandlers() {
-        document.querySelectorAll('.add-lyrics').forEach(button => {
-            button.addEventListener('click', function () {
-                const originalContainer = this.previousElementSibling;
-                const translatedContainer = document.querySelector('.lyrics2-container');
-
-                const newOriginalContainer = document.createElement('div');
-                newOriginalContainer.className = 'lyrics1-container';
-
-                const newOriginalTextArea = document.createElement('textarea');
-                newOriginalTextArea.rows = 4;
-                newOriginalTextArea.className = 'lyrics1';
-                newOriginalTextArea.name = 'lyrics1';
-                newOriginalTextArea.style.minHeight = '100px';
-                newOriginalContainer.appendChild(newOriginalTextArea);
-
-                const newOriginalRemoveButton = document.createElement('button');
-                newOriginalRemoveButton.type = 'button';
-                newOriginalRemoveButton.className = 'remove-lyrics';
-                newOriginalRemoveButton.textContent = '-';
-                newOriginalContainer.appendChild(newOriginalRemoveButton);
-
-                originalContainer.parentElement.insertBefore(newOriginalContainer, this);
-
-                const newTranslatedTextArea = document.createElement('textarea');
-                newTranslatedTextArea.rows = 4;
-                newTranslatedTextArea.className = 'lyrics2';
-                newTranslatedTextArea.name = 'lyrics2';
-                newTranslatedTextArea.style.minHeight = '100px';
-                translatedContainer.appendChild(newTranslatedTextArea);
-
-                newOriginalRemoveButton.addEventListener('click', function () {
-                    newOriginalContainer.remove();
-                    newTranslatedTextArea.remove();
+    function fetchCategories() {
+        fetch('/manage/get-categories')
+            .then(response => response.json())
+            .then(categories => {
+                const categorySelect = document.getElementById('manage-category');
+                categorySelect.innerHTML = '<option value="" disabled selected>Select the category</option>';
+                categories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category;
+                    option.textContent = category;
+                    categorySelect.appendChild(option);
                 });
-
-                autoResizeTextArea(newOriginalTextArea);
-                autoResizeTextArea(newTranslatedTextArea);
+            })
+            .catch(error => {
+                console.error('Error fetching categories:', error);
             });
+    }
+
+    function syncSongs(category) {
+        fetch('/manage/sort-songs', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ category })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showDialog(`Songs in category: ${category} have been synchronized in alphabetical order.`, 'OK', 'green');
+            } else {
+                showDialog(`Error: ${data.message}`, 'Go Back', 'red');
+            }
+        })
+        .catch(error => {
+            showDialog(`Error: ${error.message}`, 'Go Back', 'red');
         });
     }
 
-    function autoResizeTextArea() {
-        const textareas = document.querySelectorAll('.lyrics1, .lyrics2');
-        textareas.forEach(textarea => {
-            textarea.style.overflow = 'hidden';
-            textarea.addEventListener('input', function () {
-                this.style.height = 'auto';
-                this.style.height = (this.scrollHeight) + 'px';
-            });
-            textarea.dispatchEvent(new Event('input'));
+    function showDialog(message, buttonText, buttonColor) {
+        const dialog = document.createElement('div');
+        dialog.id = 'dialog';
+        dialog.style.position = 'fixed';
+        dialog.style.top = '50%';
+        dialog.style.left = '50%';
+        dialog.style.transform = 'translate(-50%, -50%)';
+        dialog.style.backgroundColor = 'white';
+        dialog.style.padding = '20px';
+        dialog.style.border = '1px solid #ccc';
+        dialog.style.borderRadius = '10px';
+        dialog.style.boxShadow = '0 0 15px rgba(0, 0, 0, 0.2)';
+        dialog.style.zIndex = '1000';
+        dialog.style.textAlign = 'center';
+
+        const messageElement = document.createElement('p');
+        messageElement.textContent = message;
+        dialog.appendChild(messageElement);
+
+        const button = document.createElement('button');
+        button.textContent = buttonText;
+        button.style.backgroundColor = buttonColor;
+        button.style.color = 'white';
+        button.style.border = 'none';
+        button.style.borderRadius = '5px';
+        button.style.padding = '10px 20px';
+        button.style.cursor = 'pointer';
+        button.addEventListener('click', function () {
+            document.body.removeChild(dialog);
         });
+
+        dialog.appendChild(button);
+        document.body.appendChild(dialog);
     }
-
-    function logout() {
-        // Clear session
-        localStorage.removeItem('sessionExpiration');
-        // Redirect to login page
-        window.location.href = '/manage/login.html';
-    }
-
-    // Set session expiration to 24 hours
-    const sessionDuration = 24 * 60 * 60 * 1000;
-    const now = new Date().getTime();
-    localStorage.setItem('sessionExpiration', now + sessionDuration);
-
-    // Initialize listeners
-    setupCategoryListener();
-    addLyricsInputHandlers();
 });
