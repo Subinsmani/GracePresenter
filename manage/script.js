@@ -64,15 +64,6 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('sync-songs-button').addEventListener('mouseover', function () {
             this.title = 'Sync the selected category in alphabetical order';
         });
-
-        document.getElementById('sync-songs-button').addEventListener('click', function () {
-            const selectedCategory = document.getElementById('manage-category').value;
-            if (selectedCategory) {
-                syncSongs(selectedCategory);
-            } else {
-                showDialog('Please select a category to sync songs.', 'OK', 'red');
-            }
-        });
     }
 
     function fetchCategories() {
@@ -91,27 +82,6 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(error => {
                 console.error('Error fetching categories:', error);
             });
-    }
-
-    function syncSongs(category) {
-        fetch('/manage/sort-songs', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ category })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                showDialog(`Songs in category: ${category} have been synchronized in alphabetical order.`, 'OK', 'green');
-            } else {
-                showDialog(`Error: ${data.message}`, 'Go Back', 'red');
-            }
-        })
-        .catch(error => {
-            showDialog(`Error: ${error.message}`, 'Go Back', 'red');
-        });
     }
 
     function showDialog(message, buttonText, buttonColor) {
