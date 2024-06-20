@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     const addNewSongsLink = document.getElementById('add-new-songs');
-    const manageSongsLink = document.getElementById('manage-songs');
+    const editSongsLink = document.getElementById('edit-songs');
     const deleteSongsLink = document.getElementById('delete-songs');
     const logoutButton = document.getElementById('logout-button');
     const contentDiv = document.getElementById('content');
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
         showAddSongFormContainer();
     });
 
-    manageSongsLink.addEventListener('click', function (event) {
+    editSongsLink.addEventListener('click', function (event) {
         event.preventDefault();
         showManageSongsContainer();
     });
