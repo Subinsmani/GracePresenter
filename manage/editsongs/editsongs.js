@@ -14,11 +14,44 @@ document.addEventListener('DOMContentLoaded', function () {
         syncSongsButton.addEventListener('click', function (event) {
             event.preventDefault();
             const category = manageCategorySelect.value;
-
             syncSongs(category);
         });
     }
+
+    fetchCategories();
+
+    document.getElementById('logout-button').addEventListener('click', function () {
+        fetch('/manage/logout')
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = '/manage/login.html';
+                } else {
+                    console.error('Logout failed');
+                }
+            })
+            .catch(error => {
+                console.error('Error during logout:', error);
+            });
+    });
 });
+
+function fetchCategories() {
+    fetch('/manage/get-categories')
+        .then(response => response.json())
+        .then(categories => {
+            const categorySelect = document.getElementById('manage-category');
+            categorySelect.innerHTML = '<option value="" disabled selected>Select the category</option>';
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                categorySelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching categories:', error);
+        });
+}
 
 function showManageSongFormContainer() {
     const manageSongFormContainer = document.getElementById('manage-song-form-container');

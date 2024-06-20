@@ -75,6 +75,10 @@ app.get('/manage', isAuthenticated, (req, res) => {
     res.sendFile(path.join(__dirname, 'manage', 'index.html'));
 });
 
+app.use('/manage/addsongs', isAuthenticated, express.static(path.join(__dirname, 'manage', 'addsongs')));
+app.use('/manage/editsongs/styles.css', express.static(path.join(__dirname, 'manage/editsongs/styles.css')));
+app.use('/manage/editsongs/', isAuthenticated, express.static(path.join(__dirname, 'manage/editsongs')));
+
 app.get('/manage/get-categories', (req, res) => {
     const categories = ['English', 'Hindi', 'Malayalam'];
     res.json(categories);
@@ -157,6 +161,9 @@ app.post('/manage/sort-songs', (req, res) => {
         }
 
         // Reassign sorted IDs based on the language and order
+        const existingIds = new Set();
+        rows.forEach(row => existingIds.add(row.id));
+        
         const updatedRows = rows.map((row, index) => {
             let prefix;
             switch (row.language.toLowerCase()) {
@@ -170,7 +177,12 @@ app.post('/manage/sort-songs', (req, res) => {
                     prefix = '30';
                     break;
             }
-            const newId = `${prefix}${String(index + 1).padStart(4, '0')}`;
+            let newId = `${prefix}${String(index + 1).padStart(4, '0')}`;
+            while (existingIds.has(newId)) {
+                index += 1;
+                newId = `${prefix}${String(index + 1).padStart(4, '0')}`;
+            }
+            existingIds.add(newId);
             return { ...row, id: newId };
         });
 

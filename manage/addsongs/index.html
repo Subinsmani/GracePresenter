@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Songs</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Manage Songs</h1>
+        <nav>
+            <ul>
+                <li><a href="/manage/addsongs/" id="add-new-songs">Add New Songs</a></li>
+                <li><a href="/manage/editsongs/" id="edit-songs">Edit Songs</a></li>
+                <li><a href="/manage/deletesongs/" id="delete-songs">Delete Songs</a></li>
+            </ul>
+        </nav>
+        <div id="buttons-container">
+            <button id="import-button">Import</button>
+            <button id="logout-button">Logout</button>
+        </div>
+
+        <h2>Add New Songs</h2>
+        <form id="add-song-form">
+            <div class="form-group">
+                <label for="category">Category:</label>
+                <select id="category" name="category" required>
+                    <option value="" disabled selected>Loading categories...</option>
+                </select>
+            </div>
+            <div class="form-group" id="has-translation-group" style="display: none;">
+                <label for="has-translation">Does the song have a translation?</label>
+                <select id="has-translation" name="has-translation" class="has-translation" required>
+                    <option value="no" selected>No</option>
+                    <option value="yes">Yes</option>
+                </select>
+            </div>
+            <div class="song-name-container" style="display: none;">
+                <div class="form-group">
+                    <label for="song-name">Song Name:</label>
+                    <input type="text" id="song-name" name="song-name" required>
+                </div>
+            </div>
+            <div class="lyrics-container">
+                <div class="lyrics-container1" style="display: none;">
+                    <div class="lyrics-section">
+                        <label for="lyrics1-title">Original Lyrics Title:</label>
+                        <input type="text" id="lyrics1-title" name="lyrics1-title" required>
+                        <label>Original Lyrics:</label>
+                        <div class="lyrics1-container">
+                            <div class="lyrics-box">
+                                <textarea rows="4" class="lyrics1" name="lyrics1" style="min-height: 100px;"></textarea>
+                            </div>
+                        </div>
+                        <button type="button" class="add-lyrics">+</button>
+                    </div>
+                </div>
+                <div class="lyrics-container2" style="display: none;">
+                    <div class="lyrics-section">
+                        <label for="lyrics2-title">Translate Lyrics Title:</label>
+                        <input type="text" id="lyrics2-title" name="lyrics2-title">
+                        <label>Translated Lyrics:</label>
+                        <div class="lyrics2-container">
+                            <div class="lyrics-box">
+                                <textarea rows="4" class="lyrics2" name="lyrics2" style="min-height: 100px;"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" id="submit-song" style="display: none;">Add Song</button>
+        </form>
+
+        <!-- Import box (initially hidden) -->
+        <div id="overlay" style="display: none;"></div>
+        <div id="import-box" style="display: none;">
+            <div class="import-box-content">
+                <h3>Import Songs</h3>
+                <p>Select a file from your PC to import songs:</p>
+                <div class="file-input-container">
+                    <input type="file" id="file-upload" class="file-upload-input" accept=".txt">
+                    <button id="browse-button" class="btn">Browse</button>
+                </div>
+                <p class="supported-files-note">Supported files are .txt</p>
+                <div class="import-actions">
+                    <button id="import-file-button" class="btn">Import</button>
+                    <button id="cancel-button" class="btn cancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="addsongs.js"></script>
+    <script src="import.js"></script>
+    <script>
+        document.getElementById('logout-button').addEventListener('click', function () {
+            fetch('/manage/logout')
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = '/manage/login.html';
+                    } else {
+                        console.error('Logout failed');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error during logout:', error);
+                });
+        });
+    </script>
+</body>
+</html>

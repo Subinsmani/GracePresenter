@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Songs</title>
+    <title>Edit Songs</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -13,14 +13,27 @@
             <ul>
                 <li><a href="/manage/addsongs/" id="add-new-songs">Add New Songs</a></li>
                 <li><a href="/manage/editsongs/" id="edit-songs">Edit Songs</a></li>
-                <li><a href="#" id="delete-songs">Delete Songs</a></li>
+                <li><a href="/manage/deletesongs/" id="delete-songs">Delete Songs</a></li>
             </ul>
         </nav>
         <div id="buttons-container">
             <button id="logout-button">Logout</button>
         </div>
+
+        <h2>Edit Songs</h2>
+        <div id="manage-song-form-container">
+            <div class="form-group">
+                <label for="manage-category">Category:</label>
+                <select id="manage-category" name="category">
+                    <option value="" disabled selected>Loading categories...</option>
+                </select>
+                <button id="sync-songs-button">Sync Songs</button>
+            </div>
+            <!-- Additional form elements for editing songs will go here -->
+        </div>
     </div>
 
+    <script src="editsongs.js"></script>
     <script>
         document.getElementById('logout-button').addEventListener('click', function () {
             fetch('/manage/logout')

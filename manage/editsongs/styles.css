@@ -1,0 +1,134 @@
+/* Adjust styles for the buttons container and the buttons */
+#buttons-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 2em;
+}
+
+#logout-button {
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 0.7em;
+}
+
+#logout-button:hover {
+    background-color: darkred;
+}
+
+/* Existing styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    background: white;
+    padding: 2.5em;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(26, 115, 232, 0.2);
+    width: 80%;
+    margin: 5% auto;
+    position: relative;
+}
+
+h1 {
+    text-align: center;
+    color: #1a73e8;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 2em;
+}
+
+nav ul li {
+    margin: 0 1em;
+}
+
+nav ul li a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #1a73e8;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+#content {
+    margin-top: 2em;
+}
+
+.form-group {
+    margin-bottom: 1em;
+    width: 100%; /* Make form-group take full width */
+}
+
+label {
+    font-weight: bold;
+}
+
+input[type="text"],
+select {
+    padding: 0.7em;
+    border: 1px solid #1a73e8;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: white;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='4'%20height='5'%20viewBox='0%200%204%205'%3E%3Cpath%20fill='%231A73E8'%20d='M2%200L0%202h4zM2%205L0%203h4z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.7em top 50%;
+    background-size: 0.65em auto;
+    width: 5cm;
+}
+
+select:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(26, 115, 232, 0.5);
+}
+
+button {
+    padding: 0.7em;
+    background-color: #1a73e8;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #155ab6;
+}
+
+#sync-songs-button {
+    background-color: #1a73e8;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 0.7em;
+    margin-left: 1em;
+}
+
+#sync-songs-button:hover {
+    background-color: #155ab6;
+}

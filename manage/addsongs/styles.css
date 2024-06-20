@@ -1,0 +1,427 @@
+/* Adjust styles for the buttons container and the buttons */
+#buttons-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 2em;
+}
+
+#import-button {
+    background-color: #1a73e8;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 0.7em;
+    margin-right: 1em;
+}
+
+#import-button:hover {
+    background-color: #155ab6;
+}
+
+#logout-button {
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 0.7em;
+}
+
+#logout-button:hover {
+    background-color: darkred;
+}
+
+/* Styles for the overlay */
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+/* Styles for the import box */
+#import-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    padding: 2em;
+    z-index: 1000;
+    width: 400px;
+    text-align: center;
+}
+
+.import-box-content h3 {
+    margin-bottom: 1em;
+    font-size: 1.5em;
+    color: #1a73e8;
+}
+
+.import-box-content p {
+    margin-bottom: 1em;
+    color: #555;
+}
+
+.file-input-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1em;
+}
+
+.file-upload-input {
+    display: none;
+}
+
+#browse-button {
+    background-color: #1a73e8;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 0.7em 1.5em;
+    margin-right: 1em;
+}
+
+#browse-button:hover {
+    background-color: #155ab6;
+}
+
+.supported-files-note {
+    font-size: 0.8em;
+    color: gray;
+    margin-bottom: 1em;
+}
+
+.import-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+}
+
+.btn {
+    background-color: #1a73e8;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 0.7em 1.5em;
+}
+
+.btn:hover {
+    background-color: #155ab6;
+}
+
+.btn.cancel {
+    background-color: #ccc;
+    color: #333;
+}
+
+.btn.cancel:hover {
+    background-color: #999;
+}
+
+/* Existing styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    background: white;
+    padding: 2.5em;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(26, 115, 232, 0.2);
+    width: 80%;
+    margin: 5% auto;
+    position: relative;
+}
+
+h1 {
+    text-align: center;
+    color: #1a73e8;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    align-items: center; /* Center the form elements */
+    position: relative;
+}
+
+.form-group {
+    margin-bottom: 1em;
+    width: 100%; /* Make form-group take full width */
+}
+
+label {
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="password"],
+select {
+    padding: 0.7em;
+    border: 1px solid #1a73e8;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: white;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='4'%20height='5'%20viewBox='0%200%204%205'%3E%3Cpath%20fill='%231A73E8'%20d='M2%200L0%202h4zM2%205L0%203h4z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.7em top 50%;
+    background-size: 0.65em auto;
+    width: 5cm;
+}
+
+select.has-translation {
+    width: auto;
+    min-width: 100px;
+}
+
+select:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(26, 115, 232, 0.5);
+}
+
+textarea.lyrics1,
+textarea.lyrics2 {
+    width: 100%;
+    margin-bottom: 1em;
+    resize: none;
+    border: 1px solid #1a73e8;
+    border-radius: 5px;
+    box-sizing: border-box;
+    min-height: 100px; /* Ensure a minimum height */
+    position: relative;
+}
+
+.lyrics1-container,
+.lyrics2-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    position: relative;
+}
+
+button {
+    padding: 0.7em;
+    background-color: #1a73e8;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #155ab6;
+}
+
+button.add-lyrics,
+button.remove-lyrics {
+    display: inline-block;
+    margin-top: 0.5em;
+    cursor: pointer;
+    background-color: #1a73e8;
+    color: white;
+    border: none;
+    padding: 0.5em 1em;
+    border-radius: 5px;
+}
+
+button.add-lyrics:hover {
+    background-color: #155ab6;
+}
+
+button.remove-lyrics {
+    background-color: red;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 0.3em 0.7em;
+    border-radius: 50%;
+    z-index: 10;
+}
+
+button.remove-lyrics:hover {
+    background-color: darkred;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 2em;
+}
+
+nav ul li {
+    margin: 0 1em;
+}
+
+nav ul li a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #1a73e8;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+#content {
+    margin-top: 2em;
+}
+
+.song-name-container {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    gap: 2em;
+}
+
+.song-name-container .form-group {
+    width: 48%;
+}
+
+.lyrics-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 2em;
+    width: 100%;
+}
+
+.lyrics-container1 {
+    display: flex;
+    flex-direction: column;
+    width: 48%;
+    position: relative;
+}
+
+.lyrics-container2 {
+    display: flex;
+    flex-direction: column;
+    width: 48%;
+    position: relative;
+}
+
+.lyrics-section {
+    width: 100%;
+}
+
+input#lyrics1-title,
+input#lyrics2-title,
+input#song-name {
+    width: 100%;
+    margin-bottom: 1em;
+    border: 1px solid #1a73e8;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+button#submit-song {
+    display: block;
+    margin-top: 1em;
+    background-color: #1a73e8;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 0.7em 1.5em;
+    font-size: 1em;
+    text-align: center;
+}
+
+button#submit-song:hover {
+    background-color: #155ab6;
+}
+
+/* New styles for manage songs container */
+#manage-song-form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#sync-songs-button {
+    background-color: #1a73e8;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 0.7em;
+    margin-left: 1em;
+}
+
+#sync-songs-button:hover {
+    background-color: #155ab6;
+}
+
+.lyrics-box {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.lyrics-box textarea {
+    flex: 1;
+}
+
+.lyrics-box .remove-lyrics {
+    margin-left: 1em;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 0.5em 1em;
+    cursor: pointer;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.lyrics-box .remove-lyrics:hover {
+    background-color: darkred;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column;
+    }
+
+    .lyrics-container {
+        flex-direction: column;
+    }
+
+    .song-name-container {
+        flex-direction: column;
+    }
+
+    .song-name-container .form-group,
+    .lyrics-container1,
+    .lyrics-container2 {
+        width: 100%;
+    }
+}
