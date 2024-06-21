@@ -20,7 +20,7 @@
             <button id="logout-button">Logout</button>
         </div>
 
-        <h2>Edit Songs</h2>
+        <h2>Manage Songs</h2>
         <div id="manage-song-form-container">
             <div class="form-group">
                 <label for="manage-category">Category:</label>
@@ -29,25 +29,35 @@
                 </select>
                 <button id="sync-songs-button">Sync Songs</button>
             </div>
-            <!-- Additional form elements for editing songs will go here -->
+            <div class="song-name-container" style="display: none;">
+                <div class="form-group">
+                    <label for="song">Song Name:</label>
+                    <select id="song">
+                        <option value="" disabled selected>--Select Song--</option>
+                    </select>
+                </div>
+            </div>
+            <div class="lyrics-container">
+                <div class="lyrics-container1" style="display: none;">
+                    <div class="form-group">
+                        <label for="lyrics1-title">Original Lyrics Title:</label>
+                        <input type="text" id="lyrics1-title" name="lyrics1-title">
+                        <label for="lyrics1">Original Lyrics:</label>
+                        <textarea id="lyrics1" name="lyrics1" rows="4" style="min-height: 100px;"></textarea>
+                    </div>
+                </div>
+                <div class="lyrics-container2" style="display: none;">
+                    <div class="form-group">
+                        <label for="lyrics2-title">Translate Lyrics Title:</label>
+                        <input type="text" id="lyrics2-title" name="lyrics2-title">
+                        <label for="lyrics2">Translated Lyrics:</label>
+                        <textarea id="lyrics2" name="lyrics2" rows="4" style="min-height: 100px;"></textarea>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script src="editsongs.js"></script>
-    <script>
-        document.getElementById('logout-button').addEventListener('click', function () {
-            fetch('/manage/logout')
-                .then(response => {
-                    if (response.ok) {
-                        window.location.href = '/manage/login.html';
-                    } else {
-                        console.error('Logout failed');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error during logout:', error);
-                });
-        });
-    </script>
 </body>
 </html>

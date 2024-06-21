@@ -35,11 +35,18 @@ body {
     width: 80%;
     margin: 5% auto;
     position: relative;
+    text-align: lrft;
 }
 
 h1 {
     text-align: center;
     color: #1a73e8;
+}
+
+h2 {
+    color: #1a73e8;
+    text-align: left;
+    margin-bottom: 1em;
 }
 
 nav ul {
@@ -72,23 +79,44 @@ nav ul li a:hover {
 .form-group {
     margin-bottom: 1em;
     width: 100%; /* Make form-group take full width */
+    text-align: left; /* Align text to the left */
 }
 
 label {
     font-weight: bold;
+    display: block;
+    margin-bottom: 0.5em;
 }
 
 input[type="text"],
-select {
+textarea {
     padding: 0.7em;
     border: 1px solid #1a73e8;
     border-radius: 5px;
     font-size: 1em;
     box-sizing: border-box;
     width: 100%;
+    margin-bottom: 1em;
 }
 
 select {
+    padding: 0.7em;
+    border: 1px solid #1a73e8;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box;
+    margin-bottom: 1em;
+}
+
+select:focus,
+input:focus,
+textarea:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(26, 115, 232, 0.5);
+}
+
+/* Styles specifically for the category select */
+#manage-category {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -101,9 +129,18 @@ select {
     width: 5cm;
 }
 
-select:focus {
-    outline: none;
-    box-shadow: 0 0 5px rgba(26, 115, 232, 0.5);
+/* Styles specifically for the song name select */
+#song {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: white;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='4'%20height='5'%20viewBox='0%200%204%205'%3E%3Cpath%20fill='%231A73E8'%20d='M2%200L0%202h4zM2%205L0%203h4z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.7em top 50%;
+    background-size: 0.65em auto;
+    width: 8cm;
 }
 
 button {
@@ -131,4 +168,26 @@ button:hover {
 
 #sync-songs-button:hover {
     background-color: #155ab6;
+}
+
+.song-name-container {
+    margin-top: 1em;
+}
+
+.lyrics-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 2em;
+    flex-wrap: nowrap;
+    margin-top: 2em;
+}
+
+.lyrics-container1, 
+.lyrics-container2 {
+    flex: 1;
+    background: #e9ecef;
+    padding: 1.5em;
+    border-radius: 10px;
+    border: 1px solid #1a73e8;
+    overflow: hidden;
 }

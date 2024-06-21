@@ -108,8 +108,24 @@ app.post('/manage/add-song', (req, res) => {
     });
 });
 
+app.get('/manage/get-song-details', (req, res) => {
+    const songName = req.query.song;
+    const sql = `SELECT name1, lyrics1, lyrics2, name2 FROM song_details WHERE name = ? COLLATE NOCASE`;
+    db.db.get(sql, [songName], (err, row) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        if (!row) {
+            return res.status(404).json({ error: `No lyrics found for song: ${songName}` });
+        }
+        res.json({ name1: row.name1, lyrics1: row.lyrics1, name2: row.name2, lyrics2: row.lyrics2 });
+    });
+});
+
 app.get('/manage/get-songs', (req, res) => {
-    db.getSongs((err, rows) => {
+    const category = req.query.category;
+    const sql = `SELECT name FROM song_details WHERE language = ?`;
+    db.db.all(sql, [category], (err, rows) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }

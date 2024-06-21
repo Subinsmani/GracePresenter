@@ -1,22 +1,24 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const manageSongsLink = document.getElementById('manage-songs');
-    const syncSongsButton = document.getElementById('sync-songs-button');
     const manageCategorySelect = document.getElementById('manage-category');
+    const songSelect = document.getElementById('song');
+    const syncSongsButton = document.getElementById('sync-songs-button');
 
-    if (manageSongsLink) {
-        manageSongsLink.addEventListener('click', function (event) {
-            event.preventDefault();
-            showManageSongFormContainer();
-        });
-    }
+    manageCategorySelect.addEventListener('change', function () {
+        const category = manageCategorySelect.value;
+        fetchSongsByCategory(category);
+        document.querySelector('.song-name-container').style.display = 'none';
+        clearLyrics();
+    });
 
-    if (syncSongsButton) {
-        syncSongsButton.addEventListener('click', function (event) {
-            event.preventDefault();
-            const category = manageCategorySelect.value;
-            syncSongs(category);
-        });
-    }
+    songSelect.addEventListener('change', function () {
+        const selectedSong = this.value;
+        fetchSongDetails(selectedSong);
+    });
+
+    syncSongsButton.addEventListener('click', function () {
+        const category = manageCategorySelect.value;
+        syncSongs(category);
+    });
 
     fetchCategories();
 
@@ -53,11 +55,82 @@ function fetchCategories() {
         });
 }
 
-function showManageSongFormContainer() {
-    const manageSongFormContainer = document.getElementById('manage-song-form-container');
-    if (manageSongFormContainer) {
-        manageSongFormContainer.style.display = 'block';
-    }
+function fetchSongsByCategory(category) {
+    fetch(`/manage/get-songs?category=${category}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(songs => {
+            const songSelect = document.getElementById('song');
+            songSelect.innerHTML = '<option value="" disabled selected>--Select Song--</option>';
+            songs.forEach(song => {
+                const option = document.createElement('option');
+                option.value = song.name;
+                option.textContent = song.name;
+                songSelect.appendChild(option);
+            });
+            document.querySelector('.song-name-container').style.display = 'block';
+        })
+        .catch(error => {
+            console.error('Error fetching songs:', error);
+        });
+}
+
+function fetchSongDetails(songName) {
+    fetch(`/manage/get-song-details?song=${songName}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            populateLyrics(data);
+        })
+        .catch(error => {
+            console.error('Error fetching song details:', error);
+        });
+}
+
+function populateLyrics(data) {
+    const lyrics1Title = document.getElementById('lyrics1-title');
+    const lyrics2Title = document.getElementById('lyrics2-title');
+
+    lyrics1Title.value = data.name1 || '';
+    lyrics2Title.value = data.name2 || '';
+
+    const lyrics1Container = document.querySelector('.lyrics-container1');
+    const lyrics2Container = document.querySelector('.lyrics-container2');
+
+    lyrics1Container.innerHTML = '<label for="lyrics1-title">Original Lyrics Title:</label><input type="text" id="lyrics1-title" name="lyrics1-title" value="' + data.name1 + '"><label for="lyrics1">Original Lyrics:</label>';
+    lyrics2Container.innerHTML = '<label for="lyrics2-title">Translate Lyrics Title:</label><input type="text" id="lyrics2-title" name="lyrics2-title" value="' + data.name2 + '"><label for="lyrics2">Translated Lyrics:</label>';
+
+    const lyrics1Array = data.lyrics1.split('<slide>').filter(lyric => lyric.trim() !== '');
+    const lyrics2Array = data.lyrics2.split('<slide>').filter(lyric => lyric.trim() !== '');
+
+    lyrics1Array.forEach((lyric, index) => {
+        const textarea = document.createElement('textarea');
+        textarea.name = `lyrics1-${index + 1}`;
+        textarea.rows = 4;
+        textarea.style.minHeight = '100px';
+        textarea.value = lyric.replace(/<br>/g, '\n');
+        lyrics1Container.appendChild(textarea);
+    });
+
+    lyrics2Array.forEach((lyric, index) => {
+        const textarea = document.createElement('textarea');
+        textarea.name = `lyrics2-${index + 1}`;
+        textarea.rows = 4;
+        textarea.style.minHeight = '100px';
+        textarea.value = lyric.replace(/<br>/g, '\n');
+        lyrics2Container.appendChild(textarea);
+    });
+
+    document.querySelector('.lyrics-container1').style.display = 'block';
+    document.querySelector('.lyrics-container2').style.display = data.lyrics2 ? 'block' : 'none';
 }
 
 function syncSongs(category) {
@@ -114,4 +187,11 @@ function showDialog(message, buttonText, buttonColor) {
 
     dialog.appendChild(button);
     document.body.appendChild(dialog);
+}
+
+function clearLyrics() {
+    document.querySelector('.lyrics-container1').style.display = 'none';
+    document.querySelector('.lyrics-container2').style.display = 'none';
+    document.getElementById('lyrics1-title').value = '';
+    document.getElementById('lyrics2-title').value = '';
 }
